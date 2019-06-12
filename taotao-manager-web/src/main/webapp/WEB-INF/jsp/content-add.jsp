@@ -4,6 +4,7 @@
 <script type="text/javascript" charset="utf-8" src="/js/kindeditor-4.1.10/lang/zh_CN.js"></script>
 <div style="padding:10px 10px 10px 10px">
 	<form id="contentAddForm" class="itemForm" method="post">
+		<%--隐藏域--%>
 		<input type="hidden" name="categoryId"/>
 	    <table cellpadding="5">
 	        <tr>
@@ -53,8 +54,12 @@
 <script type="text/javascript">
 	var contentAddEditor ;
 	$(function(){
+		//初始化一个父文本编辑器 放到content这个textarea中
 		contentAddEditor = TT.createEditor("#contentAddForm [name=content]");
+		//初始化加载图片上传
 		TT.initOnePicUpload();
+		//获取隐藏域并赋值
+		//$("#contentCategoryTree").tree("getSelected").id   表示被选中的树节点id值
 		$("#contentAddForm [name=categoryId]").val($("#contentCategoryTree").tree("getSelected").id);
 	});
 	
@@ -64,6 +69,7 @@
 					$.messager.alert('提示','表单还未填写完成!');
 					return ;
 				}
+				//同步父文本编辑器的内容  到textarea
 				contentAddEditor.sync();
 				
 				$.post("/content/save",$("#contentAddForm").serialize(), function(data){

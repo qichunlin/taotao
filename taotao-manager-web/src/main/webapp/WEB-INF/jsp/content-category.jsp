@@ -53,6 +53,7 @@
                         }
                     });
                 } else {
+                    //更新
                     $.post("/content/category/update", {id: node.id, name: node.text});
                 }
             }

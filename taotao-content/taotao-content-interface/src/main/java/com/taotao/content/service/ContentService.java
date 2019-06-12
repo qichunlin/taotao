@@ -5,11 +5,7 @@ import com.taotao.pojo.TbContent;
 
 /**
  * 内容处理的接口
- * @title ContentService.java
- * <p>description</p>
- * <p>company: www.itheima.com</p>
- * @author ljh 
- * @version 1.0
+ * @author legend
  */
 public interface ContentService {
 	/**

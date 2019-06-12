@@ -13,16 +13,18 @@ import com.taotao.pojo.TbContent;
 @Service
 public class ContentServiceImpl implements ContentService {
 
+	//注入mapper
 	@Autowired
 	private TbContentMapper mapper;
-	
+
 	@Override
 	public TaotaoResult saveContent(TbContent content) {
 		//1.注入mapper
-		
+
 		//2.补全其他的属性
 		content.setCreated(new Date());
 		content.setUpdated(content.getCreated());
+
 		//3.插入内容表中
 		mapper.insertSelective(content);
 		return TaotaoResult.ok();

@@ -3,6 +3,9 @@ package com.taotao.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 内容表
+ */
 public class TbContent implements Serializable {
     private Long id;
 
