@@ -4,8 +4,8 @@
 	   xmlns:context="http://www.springframework.org/schema/context"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!--配置注解驱动-->
-	<context:annotation-config></context:annotation-config>
+	<!--配置注解驱动(测试的时候开启,项目使用的时候关闭)-->
+	<!--<context:annotation-config></context:annotation-config>-->
 
 	<!-- 配置单机版jedis对象 -->
 	<!--<bean class="redis.clients.jedis.JedisPool">
