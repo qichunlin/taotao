@@ -18,7 +18,7 @@ import java.util.Set;
 public class TestJedisClient_Spring {
 
     //测试单机版
-    @Test
+    //@Test
     public void testJedisDanji(){
         //1.初始化spring容器
         ApplicationContext act = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-redis.xml");
@@ -31,7 +31,7 @@ public class TestJedisClient_Spring {
 
 
     //测试redis集群操作(一样的)
-    @Test
+    //@Test
     public void testJedisCluster(){
         //1.初始化spring容器
         ApplicationContext act = new ClassPathXmlApplicationContext("classpath:spring/applicationContext-redis.xml");

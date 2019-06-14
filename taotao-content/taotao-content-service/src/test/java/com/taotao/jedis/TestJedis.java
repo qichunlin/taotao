@@ -15,7 +15,7 @@ import java.util.Set;
 public class TestJedis {
 
     //测试单机版
-    @Test
+    //@Test
     public void testJedis(){
         //1.创建jedis对象,需要指定连接的地址和端口
         Jedis jedis = new Jedis("192.168.25.128",6379);
@@ -27,7 +27,7 @@ public class TestJedis {
     }
 
     //测试连接池(推荐)
-    @Test
+    //@Test
     public void testJedisPool(){
         //1.创建jedisPool对象,需要指定连接的地址和端口
         JedisPool jedisPool = new JedisPool("192.168.25.128",6379);
@@ -43,7 +43,7 @@ public class TestJedis {
     }
 
     //测试redis集群操作
-    @Test
+    //@Test
     public void testJedisCluster(){
         //1.创建JedisCluster对象
         Set<HostAndPort> nodes = new HashSet<>();

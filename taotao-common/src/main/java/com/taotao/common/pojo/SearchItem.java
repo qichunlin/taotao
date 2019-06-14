@@ -59,4 +59,13 @@ public class SearchItem implements Serializable {
 		this.item_desc = item_desc;
 	}
 
+	//获取图片的每一个链接(在页面通过itemImages获取)
+	public String[] getImges(){
+		if (this.getImage()!=null){
+			String[] split = this.getImage().split(",");
+			return split;
+		}
+		return null;
+	}
+
 }

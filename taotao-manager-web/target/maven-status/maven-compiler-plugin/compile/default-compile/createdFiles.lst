@@ -1,3 +1,4 @@
+com\taotao\controller\ImportAllItemController.class
 com\taotao\web\util\FastDFSClient.class
 com\taotao\controller\TestController.class
 com\taotao\controller\ContentCategoryController.class
