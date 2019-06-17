@@ -92,5 +92,140 @@ Container:服务运行容器
 
 >在本地服务的基础上,只需做简单的配置,即可完成远程化，在提供方增加暴露服务配置<dubbo:service》，在消费方增加引用服务配置<dubbo:reference 》。
 
-`真实应用`
+`真实应用服务层和表现层的两者使用方式`
 ![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617223318036-226441749.png)
+
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617233857306-787601442.png)
+
+
+
+## 4.注册中心
+### zookeeper介绍
+```
+注册中心负责服务地址的注册与查找,，相当于目录服务,服务提供者和消费者,只在启动时与注册中心交互,注册中心不转发请求,使用dubbo-2.3.3以上版本，官方建议使用zookeeper作为注册中心。Zookeeper是Apacahe Hadoop的子项目，是一个树型的目录服务，支持变更推送，适合作为Dubbo服务的注册中心,工业强度较高(稳定性好),可用于生产环境,并推荐使用。
+```
+
+### 环境搭建
+#### 导入虚拟机
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617231301879-1899139302.png)
+
+#### 打开后，会有提示 是否 移动 和 复制。选择我已移动即可。
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617231439902-253951394.png)
+
+#### 修改网段
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617231221115-1484511471.png)
+
+ ![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617231539701-1649931494.png)
+
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617231643911-745325293.png)
+
+
+#### 使用XShell连接虚拟机
+`注意:连接linux时可能会连接不上，先要关闭防火墙`
+```
+service 命令：只是作用于当前，系统一旦重启就失效。
+	service iptables stop
+
+可以通过命令：
+	chkconfig  iptables off  #永久关闭防火墙。
+```
+
+#### 	Zookeeper的安装
+```
+第一步：
+	安装jdk
+第二步：
+	解压缩zookeeper压缩包
+	tar -xvf zookeeper-XXX.tar.gz
+第三步：
+	将conf文件夹下zoo_sample.cfg复制一份，改名为zoo.cfg
+	cp zoo_sample.cfg zoo.cfg
+	
+第四步：
+	修改配置dataDir属性，指定一个真实目录（进入zookeeper解压目录，创建data目录：mkdir data)
+
+第五步：
+	启动zookeeper：bin/zkServer.sh start
+	关闭zookeeper：bin/zkServer.sh stop
+	查看zookeeper状态：bin/zkServer.sh status
+```
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617230932562-1852919748.png)
+
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617232307690-306438387.png)
+
+
+## 5 框架整合
+### 添加Dubbo的依赖
+```xml
+<!-- dubbo相关 -->
+<dependency>
+	<groupId>com.alibaba</groupId>
+	<artifactId>dubbo</artifactId>
+	<!-- 排除依赖 -->
+	<exclusions>
+		<exclusion>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+		</exclusion>
+		<exclusion>
+			<groupId>org.jboss.netty</groupId>
+			<artifactId>netty</artifactId>
+		</exclusion>
+	</exclusions>
+</dependency>
+<dependency>
+	<groupId>org.apache.zookeeper</groupId>
+	<artifactId>zookeeper</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.github.sgroschupf</groupId>
+	<artifactId>zkclient</artifactId>
+</dependency>
+```
+
+### 整合思路
+#### Dao层
+`mybatis整合spring，通过spring管理SqlSessionFactory、mapper代理对象。需要mybatis和spring的整合包，由spring创建数据库连接池。`
+
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617233310016-132953457.png)
+
+#### Service层
+`所有的实现类都放到spring容器中管理。并由spring管理事务；发布dubbo服务`
+
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617233520539-231800442.png)
+
+#### 表现层web：
+`SpringMVC整合Spring框架，由SpringMVC管理Controller;引入Dubbo服务`
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617233955511-691879357.png)
+
+>web.xml 配置：配置加载spring容器
+
+
+## 6.项目启动遇到的问题
+### 启动报错
+```
+需要先启动zookeeper,再启动服务层，再启动表现层。
+如果先启动表现层，后启动服务层，会报错，但是不影响使用。	
+```
+
+
+## 7.监控中心
+### 安装Tomcat
+```
+1、部署监控中心：
+	cp dubbo-admin-2.5.4.war apache-tomcat-7.0.47/webapps/dubbo-admin.war 
+
+2、启动tomcat
+   cd bin 目录，输入：./startup.sh 
+   查询tomcat是否已经启动：ps -ef|grep tomcat 
+    
+3、访问http://192.168.25.128:8080/dubbo-admin/
+	用户名：root
+	密码：root
+
+```
+`如果监控中心和注册中心在同一台服务器上，可以不需要任何配置。如果不在同一台服务器，需要修改配置文件：/root/apache-tomcat-7.0.47/webapps/dubbo-admin/WEB-INF/dubbo.properties`
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617235657014-2057252457.png)
+
+
+![](https://img2018.cnblogs.com/blog/1231979/201906/1231979-20190617235008977-1500665226.png)
